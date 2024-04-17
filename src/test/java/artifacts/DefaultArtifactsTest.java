@@ -31,4 +31,20 @@ class DefaultArtifactsTest {
             Assertions.fail("Files didn't match");
         }
     }
+
+    @Test
+    public void testArtifactCreationFailure() throws IOException {
+        String testPAT = System.getenv("DEVREV_PAT");
+        File invalidFile = new File("/path/to/nonexistent/file.html");
+        ArtifactsManager artifactsManager = new DefaultArtifactsManager(testPAT);
+        Assertions.assertThrows(IOException.class, () -> artifactsManager.createArtifact(invalidFile), "Expected createArtifact to throw, but it didn't");
+    }
+
+    @Test
+    public void testLocateArtifactFailure() throws IOException {
+        String testPAT = System.getenv("DEVREV_PAT");
+        ArtifactsManager artifactsManager = new DefaultArtifactsManager(testPAT);
+        String invalidArtifactId = "nonexistent-id";
+        Assertions.assertThrows(IOException.class, () -> artifactsManager.locateArtifact(invalidArtifactId), "Expected locateArtifact to throw, but it didn't");
+    }
 }
